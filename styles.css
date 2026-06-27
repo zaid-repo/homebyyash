@@ -47,8 +47,20 @@ footer{background:#092d22;color:#fff;padding:55px 0 24px}.footer-grid{display:gr
   .hero-visual{min-height:auto;padding:34px 0 26px}
   .portrait-card{width:min(86vw,360px);border-radius:150px 150px 20px 20px;padding:8px}
   .portrait-placeholder{height:min(430px,105vw);border-radius:140px 140px 14px 14px}
+  .portrait-caption{align-items:center;gap:12px;padding:14px 10px 8px}
+  .portrait-caption>div{min-width:0;flex:1}
+  .portrait-caption strong{font-size:12px;letter-spacing:.12em;white-space:nowrap}
+  .portrait-caption div span{font-size:11px;white-space:nowrap}
+  .caption-badge{width:42px;height:42px;flex:0 0 42px;font-size:17px}
   .floating-card{max-width:calc(100vw - 52px);font-size:11px}
   .floating-top{--float-x:-50%;left:50%;top:18px;width:max-content}
-  .floating-bottom{--float-x:50%;right:50%;bottom:34px;width:max-content}
+  .floating-bottom{--float-x:50%;right:50%;bottom:86px;width:max-content}
   .local-section,.contact-section,.services,.process,.about,.testimonial,footer{overflow:hidden}
+}
+@media (max-width:380px){
+  .portrait-card{width:90vw}
+  .portrait-caption strong{font-size:11px;letter-spacing:.1em}
+  .portrait-caption div span{font-size:10px}
+  .caption-badge{width:38px;height:38px;flex-basis:38px;font-size:16px}
+  .floating-bottom{bottom:78px}
 }
