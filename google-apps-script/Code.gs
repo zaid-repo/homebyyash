@@ -1,6 +1,7 @@
 const SHEET_NAME = "Website Leads";
 const NOTIFICATION_EMAIL = "homebyyash@gmail.com";
 const SPREADSHEET_ID = "1IWGKgzTuRguwW5V-HupOk1MV8C6KcA3lJRFbHMBgtso";
+const HEADERS = ["Timestamp", "First Name", "Last Name", "Email", "Phone", "Interest", "Message", "Source"];
 
 function doPost(event) {
   const lock = LockService.getScriptLock();
@@ -18,10 +19,8 @@ function doPost(event) {
     let sheet = spreadsheet.getSheetByName(SHEET_NAME);
     if (!sheet) {
       sheet = spreadsheet.insertSheet(SHEET_NAME);
-      sheet.appendRow(["Timestamp", "First Name", "Last Name", "Email", "Phone", "Interest", "Message", "Source"]);
-      sheet.setFrozenRows(1);
-      sheet.getRange(1, 1, 1, 8).setFontWeight("bold").setBackground("#0d3b2d").setFontColor("#ffffff");
     }
+    prepareSheet(sheet);
 
     sheet.appendRow([
       new Date(), clean(payload.firstName), clean(payload.lastName), clean(payload.email),
@@ -42,6 +41,25 @@ function doPost(event) {
   } finally {
     lock.releaseLock();
   }
+}
+
+function prepareSheet(sheet) {
+  const headerRange = sheet.getRange(1, 1, 1, HEADERS.length);
+  const currentHeaders = headerRange.getValues()[0].map((value) => String(value || "").trim());
+  const hasHeaders = HEADERS.every((header, index) => currentHeaders[index] === header);
+
+  if (!hasHeaders) {
+    const firstRowHasData = currentHeaders.some(Boolean);
+    if (firstRowHasData) sheet.insertRowBefore(1);
+    sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]);
+  }
+
+  sheet.setFrozenRows(1);
+  sheet.getRange(1, 1, 1, HEADERS.length)
+    .setFontWeight("bold")
+    .setBackground("#0d3b2d")
+    .setFontColor("#ffffff");
+  sheet.autoResizeColumns(1, HEADERS.length);
 }
 
 function getLeadsSpreadsheet() {
